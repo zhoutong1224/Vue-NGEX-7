@@ -2,113 +2,219 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Which Ghibli Character Are You?</title>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Import Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Import Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
   <style>
-    .character-img {
-      max-width: 500px;
-      border-radius: 10px;
-    }
-    
     @font-face {
       font-family: 'Luna';
       src: url('assets/fonts/Luna.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
-
-    /* Use more styles as needed */
-  
+    
+    body {
+      background-image: url('assets/bg-8.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .header {
+      text-align: center;
+      margin-top: 20px;
+      color: #e39919;
+      font-family: 'Luna', serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .traits-container {
+      margin: 30px 0;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    .result-container {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+    }
+    
+    .character-img {
+      max-width: 500px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .btn-reveal {
+      background-color: #e39919;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .btn-reveal:hover {
+      background-color: #d18a15;
+    }
+    
+    .no-result {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .trait-count {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
-<body class="p-4">
+<body>
+  <div id="app" class="container">
+    <h1 class="header">Which Ghibli Character Are You?</h1>
+    <h3 class="text-center" style="color: #e39919;">Select your traits!</h3>
+    
+    <div class="traits-container">
+      <div class="row">
+        <div class="col-md-4" v-for="trait in availableTraits" :key="trait">
+          <div class="form-check">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              :id="trait" 
+              :value="trait" 
+              v-model="selectedTraits"
+            >
+            <label class="form-check-label" :for="trait">{{ trait }}</label>
+          </div>
+        </div>
+      </div>
+      
+      <p class="trait-count">
+        Selected: {{ selectedTraits.length }}
+      </p>
+    </div>
+    
+    <button 
+      class="btn btn-warning btn-block btn-reveal" 
+      @click="findCharacter"
+      :disabled="selectedTraits.length === 0"
+    >
+      Reveal My Character
+    </button>
+    
+    <div class="result-container" v-if="result">
+      <h2 class="text-center" style="color: #e39919;">You are most like {{ result.name }}!</h2>
+      <img :src="result.image" :alt="result.name" class="character-img">
+      <p style="color: #333;">{{ result.description }}</p>
+    </div>
+    
+    <div class="no-result" v-else-if="noResult">
+      <div class="alert alert-warning">
+        Hmm... Either you didn't select any traits or we couldn't find a match. Please try again.
+      </div>
+    </div>
+  </div>
 
-  <!-- Complete this part -->
-
-<script>
-Vue.createApp({
-  data() {
-    return {
-      /* complete this part */
-      characters: [
-        {
-          name: 'Totoro',
-          traits: ['Kind', 'Quiet', 'Protective', 'Empathetic'],
-          image: 'assets/totoro.png',
-          description: 'Totoro is a gentle forest spirit who watches over children and brings joy and magic.'
-        },
-        {
-          name: 'Kiki',
-          traits: ['Brave', 'Adventurous', 'Independent', 'Hardworking'],
-          image: 'assets/kiki.webp',
-          description: 'Kiki is a young witch-in-training, brave and eager to find her place in the world.'
-        },
-        {
-          name: 'Chihiro',
-          traits: ['Curious', 'Brave', 'Kind', 'Empathetic'],
-          image: 'assets/chihiro.png',
-          description: 'Chihiro overcomes fear and shows great courage and kindness in a magical world.'
-        },
-        {
-          name: 'Calcifer',
-          traits: ['Mischievous', 'Protective', 'Witty'],
-          image: 'assets/calcifer.jpeg',
-          description: 'Calcifer is a fiery, funny spirit with a strong personality and a warm heart... literally!'
-        },
-        {
-          name: 'Howl',
-          traits: ['Mysterious', 'Brave', 'Dreamy', 'Witty'],
-          image: 'assets/howl.jpg',
-          description: 'Howl is a charming and enigmatic wizard who learns to love and protect selflessly.'
-        },
-        {
-          name: 'San',
-          traits: ['Brave', 'Loyal', 'Independent', 'Protective'],
-          image: 'assets/san.jpg',
-          description: 'San is a fierce warrior raised by wolves, deeply connected to nature and loyalty.'
-        },
-        {
-          name: 'Ponyo',
-          traits: ['Curious', 'Dreamy', 'Mischievous', 'Funny', 'Magical'],
-          image: 'assets/ponyo.jpeg',
-          description: 'Ponyo is a magical fish-girl with an adventurous heart and love for the surface world.'
-        },
-        {
-          name: 'Arrietty',
-          traits: ['Curious', 'Adventurous', 'Brave', 'Ambitious'],
-          image: 'assets/arrietty.webp',
-          description: 'Arrietty is a tiny borrower who dreams of exploring the world beyond her home.'
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          availableTraits: ['Ambitious', 'Brave', 'Curious', 'Adventurous', 'Loyal', 'Funny', 'Kind', 'Quiet', 'Mischievous', 'Dreamy', 'Hardworking', 'Protective', 'Independent', 'Empathetic', 'Mysterious'],
+          selectedTraits: [],
+          characters: [
+            {
+              name: 'Totoro',
+              traits: ['Kind', 'Quiet', 'Protective', 'Empathetic'],
+              image: 'assets/totoro.png',
+              description: 'Totoro is a gentle forest spirit who watches over children and brings joy and magic.'
+            },
+            {
+              name: 'Kiki',
+              traits: ['Brave', 'Adventurous', 'Independent', 'Hardworking'],
+              image: 'assets/kiki.webp',
+              description: 'Kiki is a young witch-in-training, brave and eager to find her place in the world.'
+            },
+            {
+              name: 'Chihiro',
+              traits: ['Curious', 'Brave', 'Kind', 'Empathetic'],
+              image: 'assets/chihiro.png',
+              description: 'Chihiro overcomes fear and shows great courage and kindness in a magical world.'
+            },
+            {
+              name: 'Calcifer',
+              traits: ['Mischievous', 'Protective', 'Witty'],
+              image: 'assets/calcifer.jpeg',
+              description: 'Calcifer is a fiery, funny spirit with a strong personality and a warm heart... literally!'
+            },
+            {
+              name: 'Howl',
+              traits: ['Mysterious', 'Brave', 'Dreamy', 'Witty'],
+              image: 'assets/howl.jpg',
+              description: 'Howl is a charming and enigmatic wizard who learns to love and protect selflessly.'
+            },
+            {
+              name: 'San',
+              traits: ['Brave', 'Loyal', 'Independent', 'Protective'],
+              image: 'assets/san.jpg',
+              description: 'San is a fierce warrior raised by wolves, deeply connected to nature and loyalty.'
+            },
+            {
+              name: 'Ponyo',
+              traits: ['Curious', 'Dreamy', 'Mischievous', 'Funny', 'Magical'],
+              image: 'assets/ponyo.jpeg',
+              description: 'Ponyo is a magical fish-girl with an adventurous heart and love for the surface world.'
+            },
+            {
+              name: 'Arrietty',
+              traits: ['Curious', 'Adventurous', 'Brave', 'Ambitious'],
+              image: 'assets/arrietty.webp',
+              description: 'Arrietty is a tiny borrower who dreams of exploring the world beyond her home.'
+            }
+          ],
+          result: null,
+          noResult: false
         }
-      ],
-      result: null,
-      noResult: false
-    }
-  },
-  methods: {
-    findCharacter() {
-      this.result = null;
-      this.noResult = false;
-
-      let bestMatch = null;
-      let highestScore = 0;
-
-      for (const char of this.characters) {
-        const matchCount = char.traits.filter(trait => this.selectedTraits.includes(trait)).length;
-        if (matchCount > highestScore) {
-          bestMatch = char;
-          highestScore = matchCount;
+      },
+      methods: {
+        findCharacter() {
+          if (this.selectedTraits.length === 0) {
+            this.noResult = true;
+            this.result = null;
+            return;
+          }
+          
+          this.result = null;
+          this.noResult = false;
+          
+          let bestMatch = null;
+          let highestScore = 0;
+          
+          for (const char of this.characters) {
+            const matchCount = char.traits.filter(trait => this.selectedTraits.includes(trait)).length;
+            if (matchCount > highestScore) {
+              bestMatch = char;
+              highestScore = matchCount;
+            }
+          }
+          
+          if (bestMatch && highestScore > 0) {
+            this.result = bestMatch;
+          } else {
+            this.noResult = true;
+          }
         }
       }
-
-      if (bestMatch && highestScore > 0) {
-        this.result = bestMatch;
-      } else {
-        this.noResult = true;
-      }
-    }
-  }
-}).mount("#app");
-</script>
+    }).mount('#app');
+  </script>
 </body>
 </html>
