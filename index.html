@@ -21,6 +21,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      background-attachment: fixed;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
@@ -53,16 +54,16 @@
       margin-bottom: 20px;
     }
     
-    .btn-reveal {
+    .btn-custom {
       background-color: #e39919;
       border: none;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
+      padding: 8px 16px;
+      font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
     }
     
-    .btn-reveal:hover {
+    .btn-custom:hover {
       background-color: #d18a15;
     }
     
@@ -78,6 +79,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app" class="container">
     <h1 class="header">Which Ghibli Character Are You?</h1>
@@ -105,13 +107,13 @@
     </div>
     
     <button 
-      class="btn btn-warning btn-block btn-reveal" 
+      class="btn-custom" 
       @click="findCharacter"
       :disabled="selectedTraits.length === 0"
     >
       Reveal My Character
     </button>
-    
+
     <div class="result-container" v-if="result">
       <h2 class="text-center" style="color: #e39919;">You are most like {{ result.name }}!</h2>
       <img :src="result.image" :alt="result.name" class="character-img">
@@ -138,42 +140,49 @@
               image: 'assets/totoro.png',
               description: 'Totoro is a gentle forest spirit who watches over children and brings joy and magic.'
             },
+
             {
               name: 'Kiki',
               traits: ['Brave', 'Adventurous', 'Independent', 'Hardworking'],
               image: 'assets/kiki.webp',
               description: 'Kiki is a young witch-in-training, brave and eager to find her place in the world.'
             },
+
             {
               name: 'Chihiro',
               traits: ['Curious', 'Brave', 'Kind', 'Empathetic'],
               image: 'assets/chihiro.png',
               description: 'Chihiro overcomes fear and shows great courage and kindness in a magical world.'
             },
+
             {
               name: 'Calcifer',
               traits: ['Mischievous', 'Protective', 'Witty'],
               image: 'assets/calcifer.jpeg',
               description: 'Calcifer is a fiery, funny spirit with a strong personality and a warm heart... literally!'
             },
+
             {
               name: 'Howl',
               traits: ['Mysterious', 'Brave', 'Dreamy', 'Witty'],
               image: 'assets/howl.jpg',
               description: 'Howl is a charming and enigmatic wizard who learns to love and protect selflessly.'
             },
+
             {
               name: 'San',
               traits: ['Brave', 'Loyal', 'Independent', 'Protective'],
               image: 'assets/san.jpg',
               description: 'San is a fierce warrior raised by wolves, deeply connected to nature and loyalty.'
             },
+
             {
               name: 'Ponyo',
               traits: ['Curious', 'Dreamy', 'Mischievous', 'Funny', 'Magical'],
               image: 'assets/ponyo.jpeg',
               description: 'Ponyo is a magical fish-girl with an adventurous heart and love for the surface world.'
             },
+
             {
               name: 'Arrietty',
               traits: ['Curious', 'Adventurous', 'Brave', 'Ambitious'],
@@ -181,10 +190,12 @@
               description: 'Arrietty is a tiny borrower who dreams of exploring the world beyond her home.'
             }
           ],
+
           result: null,
           noResult: false
         }
       },
+
       methods: {
         findCharacter() {
           if (this.selectedTraits.length === 0) {
@@ -215,6 +226,7 @@
         }
       }
     }).mount('#app');
+    
   </script>
 </body>
 </html>
